@@ -3,39 +3,76 @@ package com.example.tqs_116726_hw1;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class LocationService {
+
+    @Autowired
+    private LocationRepository locationRepository;
 
     public String location(){
         return "Location";
     }
 
-    public String userChoseLocation(@ModelAttribute Location location, Model model){
-        String latlon = "default";
-        latlon = getLocationCoordinates(location.getLocationName());
-        List<String> dataList = getLocationAirPollution(latlon);
-        assignValuesToLocation(location, dataList.get(0), dataList.get(1), dataList.get(2), dataList.get(3), dataList.get(4));
-        assignValuesToModel(location, model);
-        return "LocationInfo";
+    private int numberOfHits = 0;
+
+    public String userChoseLocation(@ModelAttribute Location location, Model model) {
+        boolean inRepo = false;
+        List<String> dataList = new ArrayList<String>();
+        LocationEntity request = locationRepository.findByLocationNameAndRequestDate(location.getLocationName(), LocalDate.now());
+        if (request != null) {
+            System.out.println("Location in database");
+            numberOfHits++;
+            inRepo = true;
+            dataList.add(request.getPM10());
+            dataList.add(request.getCO());
+            dataList.add(request.getNO2());
+            dataList.add(request.getO3());
+            dataList.add(request.getSO2());
+        } else {
+            String coordinates = "default";
+            coordinates = getLocationCoordinates(location.getLocationName());
+            dataList = getLocationAirPollution(coordinates);
+        }
+        LocationEntity locationEntity = new LocationEntity();
+        locationEntity.setLocationName(location.getLocationName());
+        locationEntity.setRequestDate(LocalDate.now());
+        if(inRepo) locationEntity.setHit(true);
+        locationEntity.setPM10(dataList.get(0));
+        locationEntity.setCO(dataList.get(1));
+        locationEntity.setNO2(dataList.get(2));
+        locationEntity.setO3(dataList.get(3));
+        locationEntity.setSO2(dataList.get(4));
+        locationRepository.save(locationEntity);
+
+            assignValuesToLocation(location, dataList.get(0), dataList.get(1), dataList.get(2), dataList.get(3), dataList.get(4));
+            assignValuesToModel(location, model);
+
+            return "LocationInfo";
     }
 
     public void assignValuesToModel(@ModelAttribute Location location, Model model){
-        model.addAttribute("locationName", location.getLocationName());
-        model.addAttribute("PM10", location.getPM10());
-        model.addAttribute("CO", location.getCO());
-        model.addAttribute("NO2", location.getNO2());
-        model.addAttribute("O3", location.getO3());
-        model.addAttribute("SO2", location.getSO2());
+        List<LocationEntity> locations = locationRepository.findAll();
+        Collections.reverse(locations);
+        model.addAttribute("locations", locations);
+        Map<String, String> nameAndValue = new LinkedHashMap<String, String>();
+        nameAndValue.put("locationName", location.getLocationName());
+        nameAndValue.put("PM10", location.getPM10());
+        nameAndValue.put("CO", location.getCO());
+        nameAndValue.put("NO2", location.getNO2());
+        nameAndValue.put("O3", location.getO3());
+        nameAndValue.put("SO2", location.getSO2());
+        model.addAttribute("nameAndValue", nameAndValue);
+        model.addAttribute("numberOfHits", numberOfHits);
     }
 
     public void assignValuesToLocation(Location location, String PM10, String CO, String NO2, String O3, String SO2){

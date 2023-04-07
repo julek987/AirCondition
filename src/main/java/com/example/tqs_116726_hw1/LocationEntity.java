@@ -1,20 +1,64 @@
 package com.example.tqs_116726_hw1;
 
-public class Location {
-    private String locationName;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "locations")
+public class LocationEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String locationName;
+    @Column(nullable = false)
+    private LocalDate requestDate;
+    @Column(nullable = false)
+    private boolean hit = false;
+
+
+    @Column(nullable = false)
     private String PM10 = "0.00";
+    @Column(nullable = false)
     private String CO = "0.00";
+    @Column(nullable = false)
     private String NO2 = "0.00";
+    @Column(nullable = false)
     private String O3 = "0.00";
+    @Column(nullable = false)
     private String SO2 = "0.00";
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
     public String getLocationName() {
         return locationName;
     }
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public LocalDate getRequestDate() {
+        return requestDate;
+    }
+
+    public void setRequestDate(LocalDate requestDate) {
+        this.requestDate = requestDate;
+    }
+
+    public boolean isHit() {
+        return hit;
+    }
+
+    public void setHit(boolean hit) {
+        this.hit = hit;
     }
 
     public String getPM10() {
@@ -51,18 +95,6 @@ public class Location {
 
     public String getSO2() {
         return SO2;
-    }
-
-    @Override
-    public String toString() {
-        return "Location{" +
-                "locationName='" + locationName + '\'' +
-                ", PM10='" + PM10 + '\'' +
-                ", CO='" + CO + '\'' +
-                ", NO2='" + NO2 + '\'' +
-                ", O3='" + O3 + '\'' +
-                ", SO2='" + SO2 + '\'' +
-                '}';
     }
 
     public void setSO2(String SO2) {

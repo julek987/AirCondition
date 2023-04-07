@@ -1,13 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Location Info</title>
+    <meta charset="UTF-8">
+    <title>Air Conditions Portugal</title>
+
+    <style>
+        image {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 18px;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 18px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #008CBA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #006F8B;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 30px;
+            font-size: 18px;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #008CBA;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
+<h1>Air Conditions Portugal</h1>
+<img src="../static/tabelka.jpg" height="287" width="1290" alt="Air Pollution Table"/>
 <form action="choose" method="post">
-    <label>Choose location:</label><br/>
-    <select name="locationName">
+    <label for="location-select">Choose location:</label><br/>
+    <select name="locationName" id="location-select">
         <option value=""></option>
         <option value="Lisbon">Lisbon</option>
         <option value="Porto">Porto</option>
@@ -23,18 +91,44 @@
     <br/>
     <button type="submit">Submit</button>
 </form>
-<h1>Air Conditions Portugal</h1>
-<h1 th:text="${locationName}">Location name</h1>
-<h2>PM10:</h2>
-<h3 th:text="${PM10}">PM10</h3>
-<h2>CO:</h2>
-<h3 th:text="${CO}">CO</h3>
-<h2>NO2:</h2>
-<h3 th:text="${NO2}">NO2</h3>
-<h2>O3:</h2>
-<h3 th:text="${O3}">O3</h3>
-<h2>SO2:</h2>
-<h3 th:text="${SO2}">SO2</h3>
 
+<h1 th:text="${nameAndValue.locationName}">Location name</h1>
+<table>
+    <thead>
+    <tr>
+        <th>PM10</th>
+        <th>CO</th>
+        <th>NO2</th>
+        <th>O3</th>
+        <th>SO2</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${nameAndValue.PM10}"></td>
+        <td th:text="${nameAndValue.CO}"></td>
+        <td th:text="${nameAndValue.NO2}"></td>
+        <td th:text="${nameAndValue.O3}"></td>
+        <td th:text="${nameAndValue.SO2}"></td>
+    </tr>
+    </tbody>
+</table>
+<h2>Number of hits: <span th:text="${numberOfHits}"></span></h2>
+<table>
+    <thead>
+    <tr>
+        <th>Location Name</th>
+        <th>Hit Or Miss</th>
+        <th>Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="location : ${locations}">
+        <td th:text="${location.locationName}"></td>
+        <td th:text="${location.hit}"></td>
+        <td th:text="${location.requestDate}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

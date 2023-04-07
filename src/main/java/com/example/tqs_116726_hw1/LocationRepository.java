@@ -6,5 +6,5 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public interface LocationRepository extends JpaRepository<LocationEntity, Long> {
-    LocationEntity findByLocationNameAndRequestDate(String locationName, LocalDate now);
+    LocationEntity findByLocationNameAndRequestDateAndHit(String locationName, LocalDate now, boolean bool);
 }

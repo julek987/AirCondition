@@ -28,7 +28,7 @@ public class LocationService {
     public String userChoseLocation(@ModelAttribute Location location, Model model) {
         boolean inRepo = false;
         List<String> dataList = new ArrayList<String>();
-        LocationEntity request = locationRepository.findByLocationNameAndRequestDate(location.getLocationName(), LocalDate.now());
+        LocationEntity request = locationRepository.findByLocationNameAndRequestDateAndHit(location.getLocationName(), LocalDate.now(), false);
         if (request != null) {
             System.out.println("Location in database");
             numberOfHits++;

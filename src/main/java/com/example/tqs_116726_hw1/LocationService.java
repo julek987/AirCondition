@@ -129,15 +129,15 @@ public class LocationService {
                 Object componentsObj = dataObject.get("components");
                 if (componentsObj instanceof JSONObject components) {
                     Object pm10Obj = components.get("pm10");
-                    PM10 = pm10Obj != null ? String.valueOf(((Double) pm10Obj).intValue()) : "N/A";
+                    PM10 = pm10Obj != null ? String.valueOf(pm10Obj) : "N/A";
                     Object coObj = components.get("co");
-                    CO = coObj != null ? String.valueOf(((Double) coObj)) : "N/A";
+                    CO = coObj != null ? String.valueOf(coObj) : "N/A";
                     Object no2Obj = components.get("no2");
-                    NO2 = no2Obj != null ? String.valueOf(((Double) no2Obj)) : "N/A";
+                    NO2 = no2Obj != null ? String.valueOf(no2Obj) : "N/A";
                     Object o3Obj = components.get("o3");
-                    O3 = o3Obj != null ? String.valueOf(((Double) o3Obj)) : "N/A";
+                    O3 = o3Obj != null ? String.valueOf(o3Obj) : "N/A";
                     Object so2Obj = components.get("so2");
-                    SO2 = so2Obj != null ? String.valueOf(((Double) so2Obj)) : "N/A";
+                    SO2 = so2Obj != null ? String.valueOf(so2Obj) : "N/A";
                 }
 
             }

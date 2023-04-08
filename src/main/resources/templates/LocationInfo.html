@@ -35,7 +35,7 @@
         button {
             margin-top: 10px;
             padding: 10px 20px;
-            background-color: #008CBA;
+            background-color: #2b83c2;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -44,7 +44,7 @@
         }
 
         button:hover {
-            background-color: #006F8B;
+            background-color: #0e71b2;
         }
 
         table {
@@ -61,7 +61,7 @@
         }
 
         th {
-            background-color: #008CBA;
+            background-color: #2b83c2;
             color: #fff;
         }
 
@@ -92,7 +92,7 @@
     <button type="submit">Submit</button>
 </form>
 
-<h1 th:text="${nameAndValue.locationName}">Location name</h1>
+<h1 th:text="${nameAndValue?.locationName}">Location name</h1>
 <table>
     <thead>
     <tr>
@@ -105,11 +105,11 @@
     </thead>
     <tbody>
     <tr>
-        <td th:text="${nameAndValue.PM10}"></td>
-        <td th:text="${nameAndValue.CO}"></td>
-        <td th:text="${nameAndValue.NO2}"></td>
-        <td th:text="${nameAndValue.O3}"></td>
-        <td th:text="${nameAndValue.SO2}"></td>
+        <td th:text="${nameAndValue?.PM10}"></td>
+        <td th:text="${nameAndValue?.CO}"></td>
+        <td th:text="${nameAndValue?.NO2}"></td>
+        <td th:text="${nameAndValue?.O3}"></td>
+        <td th:text="${nameAndValue?.SO2}"></td>
     </tr>
     </tbody>
 </table>

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,6 @@ public class LocationController {
         myMap.put("Requests",myList.get(1));
         return myMap;
     }
-
     @PostMapping("/choose")
     public String userChoseLocation(@ModelAttribute Location location, Model model){
         return locationService.userChoseLocation(location, model);

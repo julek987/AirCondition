@@ -26,38 +26,41 @@ public class LocationService {
     private int numberOfHits = 0;
 
     public String userChoseLocation(@ModelAttribute Location location, Model model) {
-        boolean inRepo = false;
-        List<String> dataList = new ArrayList<String>();
-        LocationEntity request = locationRepository.findByLocationNameAndRequestDateAndHit(location.getLocationName(), LocalDate.now(), false);
-        if (request != null) {
-            System.out.println("Location in database");
-            numberOfHits++;
-            inRepo = true;
-            dataList.add(request.getPM10());
-            dataList.add(request.getCO());
-            dataList.add(request.getNO2());
-            dataList.add(request.getO3());
-            dataList.add(request.getSO2());
-        } else {
-            String coordinates = "default";
-            coordinates = getLocationCoordinates(location.getLocationName());
-            dataList = getLocationAirPollution(coordinates);
-        }
-        LocationEntity locationEntity = new LocationEntity();
-        locationEntity.setLocationName(location.getLocationName());
-        locationEntity.setRequestDate(LocalDate.now());
-        if(inRepo) locationEntity.setHit(true);
-        locationEntity.setPM10(dataList.get(0));
-        locationEntity.setCO(dataList.get(1));
-        locationEntity.setNO2(dataList.get(2));
-        locationEntity.setO3(dataList.get(3));
-        locationEntity.setSO2(dataList.get(4));
-        locationRepository.save(locationEntity);
+        if (!(location.getLocationName() == null || location.getLocationName().isEmpty())) {
+            boolean inRepo = false;
+            List<String> dataList = new ArrayList<String>();
+            LocationEntity request = locationRepository.findByLocationNameAndRequestDateAndHit(location.getLocationName(), LocalDate.now(), false);
+            if (request != null) {
+                System.out.println("Location in database");
+                numberOfHits++;
+                inRepo = true;
+                dataList.add(request.getPM10());
+                dataList.add(request.getCO());
+                dataList.add(request.getNO2());
+                dataList.add(request.getO3());
+                dataList.add(request.getSO2());
+            } else {
+                String coordinates = "default";
+                coordinates = getLocationCoordinates(location.getLocationName());
+                dataList = getLocationAirPollution(coordinates);
+            }
+            LocationEntity locationEntity = new LocationEntity();
+            locationEntity.setLocationName(location.getLocationName());
+            locationEntity.setRequestDate(LocalDate.now());
+            if (inRepo) locationEntity.setHit(true);
+            locationEntity.setPM10(dataList.get(0));
+            locationEntity.setCO(dataList.get(1));
+            locationEntity.setNO2(dataList.get(2));
+            locationEntity.setO3(dataList.get(3));
+            locationEntity.setSO2(dataList.get(4));
+            locationRepository.save(locationEntity);
 
             assignValuesToLocation(location, dataList.get(0), dataList.get(1), dataList.get(2), dataList.get(3), dataList.get(4));
             assignValuesToModel(location, model);
 
             return "LocationInfo";
+        }else
+            return "ErrorPage";
     }
 
 

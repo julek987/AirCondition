@@ -60,6 +60,7 @@ public class LocationService {
             return "LocationInfo";
     }
 
+
     public void assignValuesToModel(@ModelAttribute Location location, Model model){
         List<LocationEntity> locations = locationRepository.findAll();
         Collections.reverse(locations);
@@ -187,5 +188,48 @@ public class LocationService {
         list.add(O3);
         list.add(SO2);
         return list;
+    }
+
+    public Location userRequestedLocationData(String locationName) {
+        Location location = new Location(locationName);
+        boolean inRepo = false;
+        List<String> dataList = new ArrayList<String>();
+        LocationEntity request = locationRepository.findByLocationNameAndRequestDateAndHit(locationName, LocalDate.now(), false);
+        if (request != null) {
+            System.out.println("Location in database");
+            numberOfHits++;
+            inRepo = true;
+            dataList.add(request.getPM10());
+            dataList.add(request.getCO());
+            dataList.add(request.getNO2());
+            dataList.add(request.getO3());
+            dataList.add(request.getSO2());
+        } else {
+            String coordinates = "default";
+            coordinates = getLocationCoordinates(locationName);
+            dataList = getLocationAirPollution(coordinates);
+        }
+        LocationEntity locationEntity = new LocationEntity();
+        locationEntity.setLocationName(locationName);
+        locationEntity.setRequestDate(LocalDate.now());
+        if(inRepo) locationEntity.setHit(true);
+        locationEntity.setPM10(dataList.get(0));
+        locationEntity.setCO(dataList.get(1));
+        locationEntity.setNO2(dataList.get(2));
+        locationEntity.setO3(dataList.get(3));
+        locationEntity.setSO2(dataList.get(4));
+        locationRepository.save(locationEntity);
+
+        assignValuesToLocation(location, dataList.get(0), dataList.get(1), dataList.get(2), dataList.get(3), dataList.get(4));
+
+        return location;
+    }
+
+    public List<Integer> getNumberOfRequestsAndHits() {
+        List<Integer> myList = new ArrayList<>(2);
+        myList.add(numberOfHits);
+        myList.add((int) locationRepository.count());
+        return myList;
+
     }
 }

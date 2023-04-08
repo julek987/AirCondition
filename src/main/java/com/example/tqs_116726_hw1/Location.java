@@ -53,6 +53,10 @@ public class Location {
         return SO2;
     }
 
+    public Location(String locationName) {
+        this.locationName = locationName;
+    }
+
     @Override
     public String toString() {
         return "Location{" +

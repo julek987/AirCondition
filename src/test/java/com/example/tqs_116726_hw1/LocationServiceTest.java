@@ -7,8 +7,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
+import java.net.HttpURLConnection;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,11 +27,16 @@ class LocationServiceTest {
 
     LocationService locationService;
 
+
+    private HttpURLConnection connection;
+    private String json;
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         locationService = new LocationService();
         locationService.locationRepository = locationRepositoryMock;
+        connection = mock(HttpURLConnection.class);
+        json = "{\"location_type\":\"city\",\"lat\":51.5072,\"lon\":-0.1276}";
     }
     @Test
     void testUserChoseLocationWithEmptyLocationName() {

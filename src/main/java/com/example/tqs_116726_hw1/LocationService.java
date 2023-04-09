@@ -51,7 +51,7 @@ public class LocationService {
                 dataList.add(request.getSO2());
             } else {
                 String coordinates = "default";
-                coordinates = getLocationCoordinates(location.getLocationName());
+                coordinates = getLocationCoordinates(location.getLocationName(), getRequestUrlForCoordinates(location.getLocationName()));
                 dataList = getLocationAirPollution(coordinates);
             }
             LocationEntity locationEntity = new LocationEntity();
@@ -101,9 +101,12 @@ public class LocationService {
         location.setSO2(SO2);
     }
 
-    public String getLocationCoordinates(String locationName){
-        String latlon = "latlon";
+    public String getRequestUrlForCoordinates(String locationName){
         String request = "http://api.openweathermap.org/geo/1.0/direct?q=" + locationName + "&limit=1&appid=c907abdf274f55dabd64eb1c69718734";
+    return request;
+    }
+    public String getLocationCoordinates(String locationName, String request){
+        String coordinates = "coordinates";
         try{
             URL url = new URL(request);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -137,12 +140,12 @@ public class LocationService {
 
                 System.out.println(countryData.get("location_type"));
 
-                latlon = countryData.get("lat") + "&lon=" + countryData.get("lon");
+                coordinates = countryData.get("lat") + "&lon=" + countryData.get("lon");
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return latlon;
+        return coordinates;
     }
     public List<String> getLocationAirPollution(String latlon){
         List<String> list = new ArrayList<String>(5);
@@ -223,7 +226,7 @@ public class LocationService {
             dataList.add(request.getSO2());
         } else {
             String coordinates = "default";
-            coordinates = getLocationCoordinates(locationName);
+            coordinates = getLocationCoordinates(locationName, getRequestUrlForCoordinates(locationName));
             dataList = getLocationAirPollution(coordinates);
         }
         LocationEntity locationEntity = new LocationEntity();
@@ -247,6 +250,5 @@ public class LocationService {
         myList.add(numberOfHits);
         myList.add((int) locationRepository.count());
         return myList;
-
     }
 }

@@ -19,6 +19,16 @@ public class LocationService {
     @Autowired
     LocationRepository locationRepository;
 
+    public LocationService(LocationRepository locationRepositoryMock) {
+    }
+
+    public LocationService() {
+    }
+
+    public void setLocationRepository(LocationRepository locationRepository) {
+        this.locationRepository = locationRepository;
+    }
+
     public String location(){
         return "Location";
     }
@@ -68,14 +78,18 @@ public class LocationService {
         List<LocationEntity> locations = locationRepository.findAll();
         Collections.reverse(locations);
         model.addAttribute("locations", locations);
-        Map<String, String> nameAndValue = new LinkedHashMap<String, String>();
-        nameAndValue.put("locationName", location.getLocationName());
-        nameAndValue.put("PM10", location.getPM10());
-        nameAndValue.put("CO", location.getCO());
-        nameAndValue.put("NO2", location.getNO2());
-        nameAndValue.put("O3", location.getO3());
-        nameAndValue.put("SO2", location.getSO2());
-        model.addAttribute("nameAndValue", nameAndValue);
+
+        if (location != null && location.getLocationName() != null) {
+            Map<String, String> nameAndValue = new LinkedHashMap<String, String>();
+            nameAndValue.put("locationName", location.getLocationName());
+            nameAndValue.put("PM10", location.getPM10());
+            nameAndValue.put("CO", location.getCO());
+            nameAndValue.put("NO2", location.getNO2());
+            nameAndValue.put("O3", location.getO3());
+            nameAndValue.put("SO2", location.getSO2());
+            model.addAttribute("nameAndValue", nameAndValue);
+        }
+
         model.addAttribute("numberOfHits", numberOfHits);
     }
 

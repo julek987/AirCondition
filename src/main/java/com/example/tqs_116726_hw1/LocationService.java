@@ -17,7 +17,7 @@ import java.util.*;
 public class LocationService {
 
     @Autowired
-    private LocationRepository locationRepository;
+    LocationRepository locationRepository;
 
     public String location(){
         return "Location";

@@ -6,9 +6,16 @@ public class Location {
     private String PM10 = "0.00";
     private String CO = "0.00";
     private String NO2 = "0.00";
+
+    public Location() {
+    }
+
     private String O3 = "0.00";
     private String SO2 = "0.00";
 
+    public Location(String locationName) {
+        this.locationName = locationName;
+    }
     public String getLocationName() {
         return locationName;
     }
@@ -53,10 +60,9 @@ public class Location {
         return SO2;
     }
 
-    public Location(String locationName) {
-        this.locationName = locationName;
+    public void setSO2(String SO2) {
+        this.SO2 = SO2;
     }
-
     @Override
     public String toString() {
         return "Location{" +
@@ -67,9 +73,5 @@ public class Location {
                 ", O3='" + O3 + '\'' +
                 ", SO2='" + SO2 + '\'' +
                 '}';
-    }
-
-    public void setSO2(String SO2) {
-        this.SO2 = SO2;
     }
 }

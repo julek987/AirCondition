@@ -6,23 +6,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 @Service
 public class LocationService {
@@ -33,7 +24,6 @@ public class LocationService {
 
 
     private int numberOfHits = 0;
-    public static final Logger logger = LogManager.getLogger();
     public LocationService(IGetHttp httpClient){
         this.httpClient = httpClient;
     };
@@ -171,17 +161,11 @@ public class LocationService {
         return myList;
     }
 
-
-
-    public String getRequestUrlForCoordinates(String locationName){
-        String request = "http://api.openweathermap.org/geo/1.0/direct?q=" + locationName + "&limit=1&appid=c907abdf274f55dabd64eb1c69718734";
-    return request;
-    }
     public Optional<String> getLocationCoordinates(String locationName) throws URISyntaxException, ParseException, IOException{
         Optional<String> coordinates;
         try{
 
-            URIBuilder uriBuilder = new URIBuilder(getRequestUrlForCoordinates(locationName));
+            URIBuilder uriBuilder = new URIBuilder("http://api.openweathermap.org/geo/1.0/direct?q=" + locationName + "&limit=1&appid=c907abdf274f55dabd64eb1c69718734");
 
             String response = httpClient.doHttpGet(uriBuilder.build().toString());
 
@@ -199,7 +183,6 @@ public class LocationService {
         System.out.println(coordinates);
         return coordinates;
     }
-
     public Optional<List<String>> getLocationAirPollution(String coordinates) throws URISyntaxException, ParseException, IOException {
         String coordinatesString = coordinates.replace("Optional[", "").replace("]", "");
         List<String> list = new ArrayList<String>(5);
